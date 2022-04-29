@@ -1,0 +1,17 @@
+---- Dev run app ----
+npm start
+
+---- Deploy ------
+npm install electron-builder --save-dev
+npm run pack
+
+npm run dist 
+
+---- Deploy Exe ------
+# for use in npm scripts
+npm install electron-packager --save-dev
+
+# for use from cli
+npm install electron-packager -g
+
+electron-packager <sourcedir> <appname> --platform=win32 --arch=x64
