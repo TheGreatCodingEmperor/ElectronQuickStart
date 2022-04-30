@@ -2,13 +2,14 @@
 const { app, BrowserWindow, ipcMain, dialog } = require('electron')
 const path = require('path')
 const FileService = require('./backend/file-service.controller');
+const url = require('url');
 
 function createWindow() {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
-    icon:'icon.png',
+    icon: 'icon.png',
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
     }
@@ -27,12 +28,18 @@ function createWindow() {
   })
 
   // and load the index.html of the app.
-  mainWindow.loadFile('index.html')
+  // mainWindow.loadFile('index.html')
   // mainWindow.loadURL('https://www.youtube.com/')
-  // mainWindow.loadURL('http://127.0.0.1:58109/index.html')
+  let pathIndex = './index.html';
+
+  mainWindow.loadURL(url.format({
+    pathname: path.join(__dirname, pathIndex),
+    protocol: 'file:',
+    slashes: true
+  }));
 
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
+  mainWindow.webContents.openDevTools()
 }
 
 // This method will be called when Electron has finished

@@ -6,10 +6,11 @@
 // process.
 // import FileService from './frontend/file-service';
 // import $ from "jquery";
-import FileService from './frontend/file-service.js';
+import FirstPage from './frontend/pages/first-page.js';
+import Router from './frontend/components/router.js';
+import FileService from './frontend/services/file-service.js';
 const _fileService = new FileService;
 
-console.log($("#btn"));
 $(document).ready(() => {
   $("#btn").on('click', function () {
     const title = $('#title').val();
@@ -29,8 +30,42 @@ $(document).ready(() => {
   $("#folder").on('click', async () => {
     const filePath = await _fileService.selectFolder(true);
     console.log(filePath)
-  })
+  });
+
+  const el = $('#content-body');
+  // el.html((new FirstPage).main());
+
+  const router = new Router;
+
+  router.error404(()=>{
+    el.html('<h3>Page Not Found!</h3>')
+  });
+
+  router.add('test',()=>{
+    el.html(`<div>main</div>`);
+  });
+
+  router.add('first',()=>{
+    el.html((new FirstPage).main());
+  });
+
+
+  $('a').on('click', (event) => {
+    event.preventDefault();
+    // Block browser page load
+
+    // Highlight Active Menu on Click
+    const target = $(event.target);
+    $('.router').removeClass('active');
+    target.addClass('active');
+
+    // Navigate to clicked url
+    const href = target.attr('href');
+    const path = href.slice(1);
+    router.navigateTo(path);
+  });
 });
+
 
 window.onkeydown = (e) => {
   var keyCode = e.keyCode || e.which;
