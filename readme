@@ -5,7 +5,7 @@ npm start
 npm install electron-builder --save-dev
 npm run pack
 
-npm run dist 
+npm run dist (太大)
 
 ---- Deploy Exe ------
 # for use in npm scripts

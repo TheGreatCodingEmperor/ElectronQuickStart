@@ -14,9 +14,7 @@ window.addEventListener('DOMContentLoaded', () => {
 const { contextBridge, ipcRenderer } = require('electron')
 contextBridge.exposeInMainWorld('electronAPI', {
   setTitle: (title) => {ipcRenderer.send('set-title', title)},
-  selectFile: async(multi) => {return ipcRenderer.send('select-file',multi)},
-  selectFolder: (multi) => {ipcRenderer.send('select-folder'),multi},
   reload:()=>{ipcRenderer.send('reload')},
-  openFile: (multi) => ipcRenderer.invoke('dialog:openFile',multi),
+  devTool:()=>{ipcRenderer.send('devTool')},
   invoke: ipcRenderer.invoke
 })

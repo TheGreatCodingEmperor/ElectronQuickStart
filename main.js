@@ -1,15 +1,16 @@
 // Modules to control application life and create native browser window
 const { app, BrowserWindow, ipcMain, dialog } = require('electron')
 const path = require('path')
-const FileService = require('./backend/file-service');
+const FileService = require('./backend/file-service.controller');
 
 function createWindow() {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
+    icon:'icon.png',
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js')
+      preload: path.join(__dirname, 'preload.js'),
     }
   })
 
@@ -21,35 +22,30 @@ function createWindow() {
 
   ipcMain.on('reload', (event) => {
     mainWindow.webContents.reload();
+  }).on('devTool', (event) => {
+    mainWindow.webContents.openDevTools();
   })
 
   // and load the index.html of the app.
   mainWindow.loadFile('index.html')
+  // mainWindow.loadURL('https://www.youtube.com/')
+  // mainWindow.loadURL('http://127.0.0.1:58109/index.html')
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools()
-}
-
-async function handleFileOpen(multi) {
-  let options = [];
-  if (multi) { options.push('multiSelections') }
-  const { canceled, filePaths } = await dialog.showOpenDialog({ properties: options })
-  if (canceled) {
-    return
-  } else {
-    return filePaths[0]
-  }
+  // mainWindow.webContents.openDevTools()
 }
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
-  ipcMain.handle('dialog:openFile', (event, multi) => handleFileOpen(multi))
+  // file controller
   let fileService = new FileService;
   ipcMain.handle('file', (e, ...args) => {
     return fileService.handler(args[0], ...(args.slice(1)));
   })
+
+
 
   createWindow()
 

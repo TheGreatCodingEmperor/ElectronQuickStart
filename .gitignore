@@ -1,3 +1,4 @@
 node_modules
 dist
-test-lab-win32-x64
+output
+custom-need
